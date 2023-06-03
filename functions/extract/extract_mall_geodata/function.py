@@ -29,4 +29,4 @@ def lambda_handler(event, context):
     bucket_name = 'mas-thesis-datapipeline-platform'
 
     s3 = boto3.resource("s3")
-    s3.Object(bucket_name, "mrt_geodata.json").put(Body=json.dumps(data))
+    s3.Object(bucket_name, "mall_geodata.json").put(Body=json.dumps(data))

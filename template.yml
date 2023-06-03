@@ -1,73 +1,57 @@
 Transform: AWS::Serverless-2016-10-31
 
+Globals:
+  Function:
+    Runtime: python3.10
+    Architectures:
+    - x86_64
+    Handler: function.lambda_handler
+
 Resources:
+  # Extract Functions
   ExtractHdbResalePricesFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/extract/extract_hdb_resale_prices/
       FunctionName: ExtractHdbResalePrices
-      Handler: function.lambda_handler
-      Runtime: python3.10
-      Architectures:
-      - x86_64
+      Policies:
+      - AmazonS3FullAccess
   ExtractMrtStationsFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/extract/extract_mrt_stations/
       FunctionName: ExtractMrtStations
-      Handler: function.lambda_handler
-      Runtime: python3.10
-      Architectures:
-      - x86_64
+      Policies:
+      - AmazonS3FullAccess
   ExtractHdbAddressGeodataFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/extract/extract_hdb_address_geodata/
       FunctionName: ExtractHdbAddressGeodata
-      Handler: function.lambda_handler
-      Runtime: python3.10
-      Architectures:
-      - x86_64
+      Policies:
+      - AmazonS3FullAccess
   ExtractMrtGeodataFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/extract/extract_mrt_geodata/
       FunctionName: ExtractMrtGeodata
-      Handler: function.lambda_handler
-      Runtime: python3.10
-      Architectures:
-      - x86_64
+      Timeout: 20
+      Policies:
+      - AmazonS3FullAccess
   ExtractMallGeodataFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/extract/extract_mall_geodata/
       FunctionName: ExtractMallGeodata
-      Handler: function.lambda_handler
-      Runtime: python3.10
-      Architectures:
-      - x86_64
-
-
-#   ApplicationResourceGroup:
-#     Type: AWS::ResourceGroups::Group
-#     Properties:
-#       Name:
-#         Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
-#       ResourceQuery:
-#         Type: CLOUDFORMATION_STACK_1_0
-#   ApplicationInsightsMonitoring:
-#     Type: AWS::ApplicationInsights::Application
-#     Properties:
-#       ResourceGroupName:
-#         Ref: ApplicationResourceGroup
-#       AutoConfigurationEnabled: 'true'
-# Outputs:
-#   HelloWorldApi:
-#     Description: API Gateway endpoint URL for Prod stage for Hello World function
-#     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-#   HelloWorldFunction:
-#     Description: Hello World Lambda Function ARN
-#     Value: !GetAtt HelloWorldFunction.Arn
-#   HelloWorldFunctionIamRole:
-#     Description: Implicit IAM Role created for Hello World function
-#     Value: !GetAtt HelloWorldFunctionRole.Arn
+      Timeout: 20
+      Policies:
+      - AmazonS3FullAccess
+  
+  # Load Functions  
+  LoadHdbResalePricesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/load/load_hdb_resale_prices/
+      FunctionName: LoadHdbResalePrices
+      Policies:
+      - AmazonS3FullAccess
