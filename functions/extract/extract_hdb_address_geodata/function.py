@@ -1,8 +1,8 @@
 import boto3
 
 def lambda_handler(event, context):
-    src_file = 'source_data/mrt_stations.xlsx'
-    dst_file = 'dp-lambda/staging/mrt_stations.xlsx'
+    src_file = 'source_data/address_geolocations.csv'
+    dst_file = 'dp-lambda/staging/address_geolocations.csv'
 
     bucket_name = 'mas-thesis-datapipeline-platform'
 

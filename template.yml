@@ -1,21 +1,52 @@
 Transform: AWS::Serverless-2016-10-31
 
 Resources:
+  ExtractHdbResalePricesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/extract/extract_hdb_resale_prices/
+      FunctionName: ExtractHdbResalePrices
+      Handler: function.lambda_handler
+      Runtime: python3.10
+      Architectures:
+      - x86_64
   ExtractMrtStationsFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/extract/extract_mrt_stations/
+      FunctionName: ExtractMrtStations
       Handler: function.lambda_handler
-      # Role: !GetAtt lambda_basic_role.Arn
       Runtime: python3.10
       Architectures:
       - x86_64
-      # Events:
-      #   HelloWorld:
-      #     Type: Api
-      #     Properties:
-      #       Path: /hello
-      #       Method: get
+  ExtractHdbAddressGeodataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/extract/extract_hdb_address_geodata/
+      FunctionName: ExtractHdbAddressGeodata
+      Handler: function.lambda_handler
+      Runtime: python3.10
+      Architectures:
+      - x86_64
+  ExtractMrtGeodataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/extract/extract_mrt_geodata/
+      FunctionName: ExtractMrtGeodata
+      Handler: function.lambda_handler
+      Runtime: python3.10
+      Architectures:
+      - x86_64
+  ExtractMallGeodataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/extract/extract_mall_geodata/
+      FunctionName: ExtractMallGeodata
+      Handler: function.lambda_handler
+      Runtime: python3.10
+      Architectures:
+      - x86_64
+
 
 #   ApplicationResourceGroup:
 #     Type: AWS::ResourceGroups::Group
