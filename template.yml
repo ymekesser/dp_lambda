@@ -23,6 +23,7 @@ Globals:
         STORAGE_FILE_MRT_GEODATA: mrt_geodata.csv
         STORAGE_FILE_MALL_GEODATA: mall_geodata.csv
         STORAGE_FILE_HDB_ADDRESS_GEODATA: address_geodata.csv
+        ANALYTICS_FILE_FEATURE_SET: feature_set.csv
 
 Resources:
   S3FileAccessLayer:
@@ -138,3 +139,55 @@ Resources:
         - !Ref S3FileAccessLayer
       Policies:
       - AmazonS3FullAccess
+
+  ##### Transform Functions #####
+  CleanHdbAddressGeodataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/transform/clean_hdb_address_geodata/
+      FunctionName: CleanHdbAddressGeodata
+      Layers:
+        - !Ref S3FileAccessLayer
+      Policies:
+      - AmazonS3FullAccess
+
+  CleanHdbResalePricesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/transform/clean_hdb_resale_prices/
+      FunctionName: CleanHdbResalePrices
+      Layers:
+        - !Ref S3FileAccessLayer
+      Policies:
+      - AmazonS3FullAccess
+
+  CleanMrtStationsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/transform/clean_mrt_stations/
+      FunctionName: CleanMrtStations
+      Layers:
+        - !Ref S3FileAccessLayer
+      Policies:
+      - AmazonS3FullAccess
+
+  CleanMallGeodataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/transform/clean_mall_geodata/
+      FunctionName: CleanMallGeodata
+      Layers:
+        - !Ref S3FileAccessLayer
+      Policies:
+      - AmazonS3FullAccess
+
+  TransformForAnalyticsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/transform/transform_for_analytics/
+      FunctionName: TransformForAnalytics
+      Layers:
+        - !Ref S3FileAccessLayer
+      Policies:
+      - AmazonS3FullAccess
+
