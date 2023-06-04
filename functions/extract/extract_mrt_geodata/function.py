@@ -1,7 +1,8 @@
-import boto3
 import requests
 import json
 import os
+
+from s3_io import write_json
 
 query = """
 [out:json];
@@ -25,10 +26,11 @@ def lambda_handler(event, context):
         )
         print(error_msg)
         raise requests.HTTPError(error_msg)
+    print(f"Overpass query successful")
 
     data = response.json()
 
-    s3 = boto3.resource("s3")
-    s3.Object(os.environ["S3_BUCKET"], "dp-lambda/staging/mrt_geodata.json").put(
-        Body=json.dumps(data)
+    write_json(
+        data,
+        os.environ["LOCATION_STAGING"] + "/" + os.environ["STORAGE_FILE_MRT_GEODATA"],
     )

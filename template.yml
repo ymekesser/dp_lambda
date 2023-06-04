@@ -25,46 +25,69 @@ Globals:
         STORAGE_FILE_HDB_ADDRESS_GEODATA: address_geodata.csv
 
 Resources:
-  # Extract Functions
+  S3FileAccessLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: layers/s3_file_access_layer/
+      CompatibleRuntimes:
+        - python3.10
+    Metadata:
+      BuildMethod: makefile
+
+  ##### Extract Functions #####
   ExtractHdbResalePricesFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/extract/extract_hdb_resale_prices/
       FunctionName: ExtractHdbResalePrices
+      Layers:
+        - !Ref S3FileAccessLayer
       Policies:
       - AmazonS3FullAccess
+
   ExtractMrtStationsFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/extract/extract_mrt_stations/
       FunctionName: ExtractMrtStations
+      Layers:
+        - !Ref S3FileAccessLayer
       Policies:
       - AmazonS3FullAccess
+
   ExtractHdbAddressGeodataFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/extract/extract_hdb_address_geodata/
       FunctionName: ExtractHdbAddressGeodata
+      Layers:
+        - !Ref S3FileAccessLayer
       Policies:
       - AmazonS3FullAccess
+
   ExtractMrtGeodataFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/extract/extract_mrt_geodata/
       FunctionName: ExtractMrtGeodata
       Timeout: 20
+      Layers:
+        - !Ref S3FileAccessLayer
       Policies:
       - AmazonS3FullAccess
+
   ExtractMallGeodataFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/extract/extract_mall_geodata/
       FunctionName: ExtractMallGeodata
       Timeout: 20
+      Layers:
+        - !Ref S3FileAccessLayer
       Policies:
       - AmazonS3FullAccess
   
-  # Load Functions  
+  ##### Load Functions #####
   LoadHdbResalePricesFunction:
     Type: AWS::Serverless::Function
     Properties:
