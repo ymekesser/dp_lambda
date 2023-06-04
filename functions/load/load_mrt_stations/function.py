@@ -6,10 +6,10 @@ from s3_io import read_dataframe, write_dataframe, join_path
 def lambda_handler(event, context):
     src_file = join_path(
         os.environ["LOCATION_STAGING"],
-        Path(os.environ["STORAGE_FILE_HDB_RESALE_PRICES"]).name,
+        Path(os.environ["SOURCE_MRT_STATIONS"]).name,
     )
     dst_file = join_path(
-        os.environ["LOCATION_STORAGE"], os.environ["STORAGE_FILE_HDB_RESALE_PRICES"]
+        os.environ["LOCATION_STORAGE"], os.environ["STORAGE_FILE_MRT_STATIONS"]
     )
     df = read_dataframe(src_file)
 

@@ -7,14 +7,16 @@ import posixpath
 
 
 def join_path(*paths):
-    return posixpath.join(paths)
+    return posixpath.join(*[str(path) for path in paths])
 
 
 def write_json(data, dst_path):
     print(f"Write JSON data to {dst_path}")
 
+    bytes = json.dumps(data).encode("utf-8")
+
     s3 = boto3.resource("s3")
-    s3.Object(os.environ["S3_BUCKET"], dst_path).put(Body=json.dumps(data))
+    s3.Object(os.environ["S3_BUCKET"], dst_path).put(Body=bytes)
 
 
 def read_json(src_path):

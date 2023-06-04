@@ -93,5 +93,47 @@ Resources:
     Properties:
       CodeUri: functions/load/load_hdb_resale_prices/
       FunctionName: LoadHdbResalePrices
+      Layers:
+        - !Ref S3FileAccessLayer
+      Policies:
+      - AmazonS3FullAccess
+
+  LoadMrtStationsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/load/load_mrt_stations/
+      FunctionName: LoadMrtStations
+      Layers:
+        - !Ref S3FileAccessLayer
+      Policies:
+      - AmazonS3FullAccess
+
+  LoadHdbAddressGeodataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/load/load_hdb_address_geodata/
+      FunctionName: LoadHdbAddressGeodata
+      Layers:
+        - !Ref S3FileAccessLayer
+      Policies:
+      - AmazonS3FullAccess
+
+  LoadMallGeodataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/load/load_mall_geodata/
+      FunctionName: LoadMallGeodata
+      Layers:
+        - !Ref S3FileAccessLayer
+      Policies:
+      - AmazonS3FullAccess
+
+  LoadMrtGeodataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/load/load_mrt_geodata/
+      FunctionName: LoadMrtGeodata
+      Layers:
+        - !Ref S3FileAccessLayer
       Policies:
       - AmazonS3FullAccess
