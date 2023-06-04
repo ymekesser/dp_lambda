@@ -13,3 +13,5 @@ def lambda_handler(event, context):
     print(f"Extracting {src_file} to {dst_file} on S3 Bucket {bucket_name}")
 
     copy_file(src_file, dst_file)
+
+    return event

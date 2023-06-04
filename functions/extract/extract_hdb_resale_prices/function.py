@@ -9,3 +9,5 @@ def lambda_handler(event, context):
     dst_file = join_path(os.environ["LOCATION_STAGING"], Path(src_file).name)
 
     copy_file(src_file, dst_file)
+
+    return event

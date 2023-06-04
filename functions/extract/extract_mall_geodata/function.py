@@ -36,3 +36,5 @@ def lambda_handler(event, context):
     data = response.json()
 
     write_json(data, dst_file)
+
+    return event

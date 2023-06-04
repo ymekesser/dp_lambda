@@ -15,4 +15,4 @@ def lambda_handler(event, context):
 
     write_dataframe(df, dst_file)
 
-    return {"message": "Successfully loaded to S3 storage"}
+    return event

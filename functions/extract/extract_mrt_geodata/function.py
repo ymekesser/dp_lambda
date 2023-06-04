@@ -35,3 +35,5 @@ def lambda_handler(event, context):
         data,
         dst_file,
     )
+
+    return event
