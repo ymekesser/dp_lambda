@@ -1,3 +1,4 @@
+import pickle
 import boto3
 import os
 import json
@@ -57,6 +58,15 @@ def read_excel(src_path: str, sheet: str) -> pd.DataFrame:
     df = pd.read_excel(io.BytesIO(obj.get()["Body"].read()), sheet_name=sheet)
 
     return df
+
+
+def write_pickle(obj: any, dst_path: str) -> None:
+    print(f"Writing pickled object to {dst_path}")
+
+    bytes = pickle.dumps(obj).encode("utf-8")
+
+    s3 = boto3.resource("s3")
+    s3.Object(os.environ["S3_BUCKET"], dst_path).put(Body=bytes)
 
 
 def copy_file(src_path: str, dst_path: str) -> None:

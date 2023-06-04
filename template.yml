@@ -25,6 +25,7 @@ Globals:
         STORAGE_FILE_MALL_GEODATA: mall_geodata.csv
         STORAGE_FILE_HDB_ADDRESS_GEODATA: address_geodata.csv
         ANALYTICS_FILE_FEATURE_SET: feature_set.csv
+        MODEL_FILE: model.pickle
 
 Resources:
 
@@ -38,14 +39,14 @@ Resources:
     Metadata:
       BuildMethod: makefile
 
-  AnalyticsLayer:
-    Type: AWS::Serverless::LayerVersion
-    Properties:
-      ContentUri: layers/analytics_layer/
-      CompatibleRuntimes:
-        - python3.10
-    Metadata:
-      BuildMethod: makefile
+  # AnalyticsLayer:
+  #   Type: AWS::Serverless::LayerVersion
+  #   Properties:
+  #     ContentUri: layers/analytics_layer/
+  #     CompatibleRuntimes:
+  #       - python3.10
+  #   Metadata:
+  #     BuildMethod: makefile
 
   ##### Extract Functions #####
   ExtractHdbResalePricesFunction:
@@ -201,7 +202,19 @@ Resources:
       FunctionName: TransformForAnalytics
       Layers:
         - !Ref S3FileAccessLayer
-        # - !Ref AnalyticsLayer
+        - arn:aws:lambda:ap-southeast-2:894604930168:layer:AnalyticsLayer:8
+      Policies:
+      - AmazonS3FullAccess
+
+  ##### Analytics Functions #####
+  AnalyticsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/analytics/
+      FunctionName: Analytics
+      Layers:
+        - !Ref S3FileAccessLayer
+        - arn:aws:lambda:ap-southeast-2:894604930168:layer:AnalyticsLayer:8
       Policies:
       - AmazonS3FullAccess
 
