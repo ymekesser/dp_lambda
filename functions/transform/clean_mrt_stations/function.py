@@ -14,7 +14,7 @@ def lambda_handler(event, context):
     )
     dst_file = join_path(
         os.environ["LOCATION_TRANSFORMED_ANALYTICS"],
-        os.environ["STORAGE_FILE_HDB_ADDRESS_GEODATA"],
+        os.environ["STORAGE_FILE_MRT_GEODATA"],
     )
 
     mrt_stations = read_dataframe(mrt_stations_src_file)

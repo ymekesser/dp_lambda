@@ -2,11 +2,9 @@ Transform: AWS::Serverless-2016-10-31
 
 Globals:
   Function:
-    Runtime: python3.10
     Architectures:
     - x86_64
     MemorySize: 512
-    Handler: function.lambda_handler
     Timeout: 10
     Environment:
       Variables:
@@ -39,6 +37,15 @@ Resources:
     Metadata:
       BuildMethod: makefile
 
+  # AnalyticsLayer:
+  #   Type: AWS::Serverless::LayerVersion
+  #   Properties:
+  #     ContentUri: layers/analytics_layer/
+  #     CompatibleRuntimes:
+  #       - python3.10
+  #   Metadata:
+  #     BuildMethod: makefile
+
   ##### Extract Functions #####
   ExtractHdbResalePricesFunction:
     Type: AWS::Serverless::Function
@@ -47,6 +54,8 @@ Resources:
       FunctionName: ExtractHdbResalePrices
       Layers:
         - !Ref S3FileAccessLayer
+      Runtime: python3.10
+      Handler: function.lambda_handler
       Policies:
       - AmazonS3FullAccess
 
@@ -57,6 +66,8 @@ Resources:
       FunctionName: ExtractMrtStations
       Layers:
         - !Ref S3FileAccessLayer
+      Runtime: python3.10
+      Handler: function.lambda_handler
       Policies:
       - AmazonS3FullAccess
 
@@ -67,6 +78,8 @@ Resources:
       FunctionName: ExtractHdbAddressGeodata
       Layers:
         - !Ref S3FileAccessLayer
+      Runtime: python3.10
+      Handler: function.lambda_handler
       Policies:
       - AmazonS3FullAccess
 
@@ -78,6 +91,8 @@ Resources:
       Timeout: 20
       Layers:
         - !Ref S3FileAccessLayer
+      Runtime: python3.10
+      Handler: function.lambda_handler
       Policies:
       - AmazonS3FullAccess
 
@@ -89,6 +104,8 @@ Resources:
       Timeout: 20
       Layers:
         - !Ref S3FileAccessLayer
+      Runtime: python3.10
+      Handler: function.lambda_handler
       Policies:
       - AmazonS3FullAccess
   
@@ -100,6 +117,8 @@ Resources:
       FunctionName: LoadHdbResalePrices
       Layers:
         - !Ref S3FileAccessLayer
+      Runtime: python3.10
+      Handler: function.lambda_handler
       Policies:
       - AmazonS3FullAccess
 
@@ -111,6 +130,8 @@ Resources:
       Timeout: 15
       Layers:
         - !Ref S3FileAccessLayer
+      Runtime: python3.10
+      Handler: function.lambda_handler
       Policies:
       - AmazonS3FullAccess
 
@@ -121,6 +142,8 @@ Resources:
       FunctionName: LoadHdbAddressGeodata
       Layers:
         - !Ref S3FileAccessLayer
+      Runtime: python3.10
+      Handler: function.lambda_handler
       Policies:
       - AmazonS3FullAccess
 
@@ -131,6 +154,8 @@ Resources:
       FunctionName: LoadMallGeodata
       Layers:
         - !Ref S3FileAccessLayer
+      Runtime: python3.10
+      Handler: function.lambda_handler
       Policies:
       - AmazonS3FullAccess
 
@@ -141,6 +166,8 @@ Resources:
       FunctionName: LoadMrtGeodata
       Layers:
         - !Ref S3FileAccessLayer
+      Runtime: python3.10
+      Handler: function.lambda_handler
       Policies:
       - AmazonS3FullAccess
 
@@ -152,6 +179,8 @@ Resources:
       FunctionName: CleanHdbAddressGeodata
       Layers:
         - !Ref S3FileAccessLayer
+      Runtime: python3.10
+      Handler: function.lambda_handler
       Policies:
       - AmazonS3FullAccess
 
@@ -163,6 +192,8 @@ Resources:
       Timeout: 10
       Layers:
         - !Ref S3FileAccessLayer
+      Runtime: python3.10
+      Handler: function.lambda_handler
       Policies:
       - AmazonS3FullAccess
 
@@ -173,6 +204,8 @@ Resources:
       FunctionName: CleanMrtStations
       Layers:
         - !Ref S3FileAccessLayer
+      Runtime: python3.10
+      Handler: function.lambda_handler
       Policies:
       - AmazonS3FullAccess
 
@@ -183,5 +216,34 @@ Resources:
       FunctionName: CleanMallGeodata
       Layers:
         - !Ref S3FileAccessLayer
+      Runtime: python3.10
+      Handler: function.lambda_handler
       Policies:
       - AmazonS3FullAccess
+
+  TransformForAnalyticsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      FunctionName: TransformForAnalytics
+      Timeout: 20
+      Policies:
+      - AmazonS3FullAccess
+    Metadata:
+      DockerContext: functions/transform/transform_for_analytics/
+      Dockerfile: Dockerfile
+
+  ##### Analytics Functions #####
+  AnalyticsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      FunctionName: Analytics
+      Timeout: 600
+      MemorySize: 3008
+      Policies:
+      - AmazonS3FullAccess
+    Metadata:
+      DockerContext: ./functions/analytics/
+      Dockerfile: Dockerfile
+

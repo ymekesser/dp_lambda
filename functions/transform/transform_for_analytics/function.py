@@ -1,10 +1,11 @@
+import boto3
 import os
+import posixpath
+import io
 import pandas as pd
 from math import radians
 
 from scipy.spatial import cKDTree
-
-from s3_io import read_dataframe, write_dataframe, join_path
 
 
 def lambda_handler(event, context):
@@ -112,3 +113,27 @@ def _find_closest_location(
     feature_set.drop(["latitude_rad", "longitude_rad"], axis=1, inplace=True)
 
     return feature_set
+
+
+def join_path(*paths) -> str:
+    return posixpath.join(*[str(path) for path in paths])
+
+
+def read_dataframe(src_path: str) -> pd.DataFrame:
+    print(f"Read dataframe from {src_path}")
+
+    s3 = boto3.resource("s3")
+    obj = s3.Object(os.environ["S3_BUCKET"], src_path)
+    df = pd.read_csv(io.BytesIO(obj.get()["Body"].read()))
+
+    return df
+
+
+def write_dataframe(df: pd.DataFrame, dst_path: str) -> None:
+    print(f"Write dataframe to {dst_path}")
+
+    csv_buffer = io.StringIO()
+    df.to_csv(csv_buffer, index=False)
+
+    s3 = boto3.resource("s3")
+    s3.Object(os.environ["S3_BUCKET"], dst_path).put(Body=csv_buffer.getvalue())

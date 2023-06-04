@@ -1,18 +1,19 @@
-import logging
+import boto3
 import pandas as pd
 import numpy as np
 import os
-from pathlib import Path
+import posixpath
+import io
+import pickle
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 import sklearn.metrics as metrics
 
-from s3_io import join_path, read_dataframe, write_pickle
 
-
-def run_analytics() -> None:
+def lambda_handler(event, context):
+    print("Preparing data")
     feature_set = read_dataframe(
         join_path(
             os.environ["LOCATION_TRANSFORMED_ANALYTICS"],
@@ -87,8 +88,24 @@ Accuracy: {df_metrics["Accuracy"]}
     print(formatted_metrics)
 
 
-def _read_feature_set() -> pd.DataFrame:
-    log.info(f"Loading {feature_set_filename} from transformed_analytics for analytics")
-    path = Path(transformed_analytics_path) / feature_set_filename
+def join_path(*paths) -> str:
+    return posixpath.join(*[str(path) for path in paths])
 
-    return storage.read_dataframe(path)
+
+def read_dataframe(src_path: str) -> pd.DataFrame:
+    print(f"Read dataframe from {src_path}")
+
+    s3 = boto3.resource("s3")
+    obj = s3.Object(os.environ["S3_BUCKET"], src_path)
+    df = pd.read_csv(io.BytesIO(obj.get()["Body"].read()))
+
+    return df
+
+
+def write_pickle(obj: any, dst_path: str) -> None:
+    print(f"Writing pickled object to {dst_path}")
+
+    bytes = pickle.dumps(obj)
+
+    s3 = boto3.resource("s3")
+    s3.Object(os.environ["S3_BUCKET"], dst_path).put(Body=bytes)

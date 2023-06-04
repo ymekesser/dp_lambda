@@ -27,3 +27,4 @@ jobs:
           --s3-prefix build
           --capabilities CAPABILITY_IAM
           --region ${{ vars.AWS_REGION }}
+          --image-repository 894604930168.dkr.ecr.ap-southeast-2.amazonaws.com/dp-lambda
