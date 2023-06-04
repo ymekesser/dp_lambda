@@ -103,6 +103,7 @@ Resources:
     Properties:
       CodeUri: functions/load/load_mrt_stations/
       FunctionName: LoadMrtStations
+      Timeout: 15
       Layers:
         - !Ref S3FileAccessLayer
       Policies:

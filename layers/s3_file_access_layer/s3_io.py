@@ -6,11 +6,11 @@ import io
 import posixpath
 
 
-def join_path(*paths):
+def join_path(*paths) -> str:
     return posixpath.join(*[str(path) for path in paths])
 
 
-def write_json(data, dst_path):
+def write_json(data, dst_path: str) -> None:
     print(f"Write JSON data to {dst_path}")
 
     bytes = json.dumps(data).encode("utf-8")
@@ -19,7 +19,7 @@ def write_json(data, dst_path):
     s3.Object(os.environ["S3_BUCKET"], dst_path).put(Body=bytes)
 
 
-def read_json(src_path):
+def read_json(src_path: str):
     print(f"Read JSON data from {src_path}")
 
     s3 = boto3.resource("s3")
@@ -28,7 +28,7 @@ def read_json(src_path):
     return json.loads(data)
 
 
-def write_dataframe(df, dst_path):
+def write_dataframe(df: pd.DataFrame, dst_path: str) -> None:
     print(f"Write dataframe to {dst_path}")
 
     csv_buffer = io.StringIO()
@@ -38,7 +38,7 @@ def write_dataframe(df, dst_path):
     s3.Object(os.environ["S3_BUCKET"], dst_path).put(Body=csv_buffer.getvalue())
 
 
-def read_dataframe(src_path):
+def read_dataframe(src_path: str) -> pd.DataFrame:
     print(f"Read dataframe from {src_path}")
 
     s3 = boto3.resource("s3")
@@ -48,7 +48,18 @@ def read_dataframe(src_path):
     return df
 
 
-def copy_file(src_path, dst_path):
+def read_excel(src_path: str, sheet: str) -> pd.DataFrame:
+    print(f"Read excel data from {src_path} (sheet: {sheet})")
+
+    s3 = boto3.resource("s3")
+    obj = s3.Object(os.environ["S3_BUCKET"], src_path)
+
+    df = pd.read_excel(io.BytesIO(obj.get()["Body"].read()), sheet_name=sheet)
+
+    return df
+
+
+def copy_file(src_path: str, dst_path: str) -> None:
     print(f"Copying file from {src_path} to {dst_path}")
 
     bucket_name = os.environ["S3_BUCKET"]
