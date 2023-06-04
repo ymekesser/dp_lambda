@@ -26,10 +26,21 @@ Globals:
         ANALYTICS_FILE_FEATURE_SET: feature_set.csv
 
 Resources:
+
+  ##### Layers #####
   S3FileAccessLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
       ContentUri: layers/s3_file_access_layer/
+      CompatibleRuntimes:
+        - python3.10
+    Metadata:
+      BuildMethod: makefile
+
+  AnalyticsLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: layers/analytics_layer/
       CompatibleRuntimes:
         - python3.10
     Metadata:
