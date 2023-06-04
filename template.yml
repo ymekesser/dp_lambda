@@ -7,7 +7,7 @@ Globals:
     - x86_64
     MemorySize: 512
     Handler: function.lambda_handler
-    Timeout: 5
+    Timeout: 10
     Environment:
       Variables:
         S3_BUCKET: mas-thesis-datapipeline-platform
@@ -38,14 +38,14 @@ Resources:
     Metadata:
       BuildMethod: makefile
 
-  AnalyticsLayer:
-    Type: AWS::Serverless::LayerVersion
-    Properties:
-      ContentUri: layers/analytics_layer/
-      CompatibleRuntimes:
-        - python3.10
-    Metadata:
-      BuildMethod: makefile
+  # AnalyticsLayer:
+  #   Type: AWS::Serverless::LayerVersion
+  #   Properties:
+  #     ContentUri: layers/analytics_layer/
+  #     CompatibleRuntimes:
+  #       - python3.10
+  #   Metadata:
+  #     BuildMethod: makefile
 
   ##### Extract Functions #####
   ExtractHdbResalePricesFunction:
@@ -168,6 +168,7 @@ Resources:
     Properties:
       CodeUri: functions/transform/clean_hdb_resale_prices/
       FunctionName: CleanHdbResalePrices
+      Timeout: 10
       Layers:
         - !Ref S3FileAccessLayer
       Policies:
@@ -193,13 +194,14 @@ Resources:
       Policies:
       - AmazonS3FullAccess
 
-  TransformForAnalyticsFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: functions/transform/transform_for_analytics/
-      FunctionName: TransformForAnalytics
-      Layers:
-        - !Ref S3FileAccessLayer
-      Policies:
-      - AmazonS3FullAccess
+  # TransformForAnalyticsFunction:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     CodeUri: functions/transform/transform_for_analytics/
+  #     FunctionName: TransformForAnalytics
+  #     Layers:
+  #       - !Ref S3FileAccessLayer
+  #       # - !Ref AnalyticsLayer
+  #     Policies:
+  #     - AmazonS3FullAccess
 

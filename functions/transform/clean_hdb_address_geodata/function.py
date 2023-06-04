@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 
+from pandas_util import select_columns
 from s3_io import read_dataframe, write_dataframe, join_path
 
 
@@ -18,15 +19,18 @@ def lambda_handler(event, context):
     hdb_address_geodata = _remove_duplicates(hdb_address_geodata)
     hdb_address_geodata = _remove_untrusted_entries(hdb_address_geodata)
 
-    hdb_address_geodata = hdb_address_geodata[
-        "block",
-        "street_name",
-        "latitude",
-        "longitude",
-        "postal_code",
-        "confidence",
-        "type",
-    ]
+    hdb_address_geodata = select_columns(
+        hdb_address_geodata,
+        {
+            "block": "block",
+            "street_name": "street_name",
+            "latitude": "latitude",
+            "longitude": "longitude",
+            "postal_code": "postal_code",
+            "confidence": "confidence",
+            "type": "type",
+        },
+    )
 
     write_dataframe(hdb_address_geodata, dst_file)
 
