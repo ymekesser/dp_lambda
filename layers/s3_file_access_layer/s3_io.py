@@ -23,7 +23,7 @@ def read_json(src_path: str):
     print(f"Read JSON data from {src_path}")
 
     s3 = boto3.resource("s3")
-    obj = s3.Object(os.environ["S3_BUCKET"], s3)
+    obj = s3.Object(os.environ["S3_BUCKET"], src_path)
     data = obj.get()["Body"].read().decode("utf-8")
     return json.loads(data)
 
