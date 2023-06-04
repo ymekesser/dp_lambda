@@ -1,7 +1,7 @@
-import boto3
 import requests
-import json
 import os
+
+from s3_io import write_json
 
 query = """
 [out:json];
@@ -32,7 +32,7 @@ def lambda_handler(event, context):
 
     data = response.json()
 
-    s3 = boto3.resource("s3")
-    s3.Object(os.environ["S3_BUCKET"], "dp-lambda/staging/mall_geodata.json").put(
-        Body=json.dumps(data)
+    write_json(
+        data,
+        os.environ["LOCATION_STAGING"] + "/" + os.environ["STORAGE_FILE_MALL_GEODATA"],
     )

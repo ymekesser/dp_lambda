@@ -1,5 +1,4 @@
 import requests
-import json
 import os
 
 from s3_io import write_json
