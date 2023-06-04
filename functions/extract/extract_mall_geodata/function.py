@@ -17,13 +17,18 @@ out center;
 
 def lambda_handler(event, context):
     endpoint = os.environ["API_OVERPASS"]
+
+    print(f"Querying overpass ({endpoint}). Query: {query}")
+
     response = requests.get(endpoint, params={"data": query})
 
     if response.status_code != 200:
         error_msg = (
             f"Overpass API returned {response.status_code} status code: {response.text}"
         )
+        print(error_msg)
         raise requests.HTTPError(error_msg)
+    print(f"Overpass query successful")
 
     data = response.json()
 

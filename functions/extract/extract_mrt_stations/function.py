@@ -9,6 +9,8 @@ def lambda_handler(event, context):
 
     bucket_name = os.environ["S3_BUCKET"]
 
+    print(f"Extracting {src_file} to {dst_file} on S3 Bucket {bucket_name}")
+
     copy_source = {"Bucket": bucket_name, "Key": src_file}
 
     s3 = boto3.resource("s3")
