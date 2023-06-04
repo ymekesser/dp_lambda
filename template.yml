@@ -38,14 +38,14 @@ Resources:
     Metadata:
       BuildMethod: makefile
 
-  # AnalyticsLayer:
-  #   Type: AWS::Serverless::LayerVersion
-  #   Properties:
-  #     ContentUri: layers/analytics_layer/
-  #     CompatibleRuntimes:
-  #       - python3.10
-  #   Metadata:
-  #     BuildMethod: makefile
+  AnalyticsLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: layers/analytics_layer/
+      CompatibleRuntimes:
+        - python3.10
+    Metadata:
+      BuildMethod: makefile
 
   ##### Extract Functions #####
   ExtractHdbResalePricesFunction:
@@ -194,14 +194,14 @@ Resources:
       Policies:
       - AmazonS3FullAccess
 
-  # TransformForAnalyticsFunction:
-  #   Type: AWS::Serverless::Function
-  #   Properties:
-  #     CodeUri: functions/transform/transform_for_analytics/
-  #     FunctionName: TransformForAnalytics
-  #     Layers:
-  #       - !Ref S3FileAccessLayer
-  #       # - !Ref AnalyticsLayer
-  #     Policies:
-  #     - AmazonS3FullAccess
+  TransformForAnalyticsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/transform/transform_for_analytics/
+      FunctionName: TransformForAnalytics
+      Layers:
+        - !Ref S3FileAccessLayer
+        # - !Ref AnalyticsLayer
+      Policies:
+      - AmazonS3FullAccess
 
