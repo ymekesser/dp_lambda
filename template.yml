@@ -6,6 +6,23 @@ Globals:
     Architectures:
     - x86_64
     Handler: function.lambda_handler
+    Timeout: 5
+    Environment:
+      Variables:
+        S3_BUCKET: mas-thesis-datapipeline-platform
+        SOURCE_HDB_RESALE_PRICES: source_data/resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv
+        SOURCE_MRT_STATIONS: source_data/mrt_stations.xlsx
+        SOURCE_HDB_ADDRESS_GEODATA: source_data/address_geolocations.csv
+        LOCATION_STAGING: dp-lambda/staging
+        LOCATION_STORAGE: dp-lambda/storage
+        LOCATION_TRANSFORMED_ANALYTICS: dp-lambda/transformed_analytics
+        LOCATION_ANALYTICS: dp-lambda/analytics
+        API_OVERPASS: https://overpass-api.de/api/interpreter
+        STORAGE_FILE_HDB_RESALE_PRICES: resale_flat_prices.csv
+        STORAGE_FILE_MRT_STATIONS: mrt_stations.csv
+        STORAGE_FILE_MRT_GEODATA: mrt_geodata.csv
+        STORAGE_FILE_MALL_GEODATA: mall_geodata.csv
+        STORAGE_FILE_HDB_ADDRESS_GEODATA: address_geodata.csv
 
 Resources:
   # Extract Functions

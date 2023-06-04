@@ -1,6 +1,7 @@
 import boto3
 import requests
 import json
+import os
 
 query = """
 [out:json];
@@ -9,20 +10,20 @@ node(area)["subway"="yes"];
 out;
 """
 
-overpass_endpoint = "https://overpass-api.de/api/interpreter"
 
 def lambda_handler(event, context):
-    response = requests.get(overpass_endpoint, params={"data": query})
+    endpoint = os.environ["API_OVERPASS"]
+    response = requests.get(endpoint, params={"data": query})
 
     if response.status_code != 200:
         error_msg = (
             f"Overpass API returned {response.status_code} status code: {response.text}"
         )
         raise requests.HTTPError(error_msg)
-    
+
     data = response.json()
-    
-    bucket_name = 'mas-thesis-datapipeline-platform'
 
     s3 = boto3.resource("s3")
-    s3.Object(bucket_name, "mrt_geodata.json").put(Body=json.dumps(data))
+    s3.Object(os.environ["S3_BUCKET"], "dp-lambda/staging/mrt_geodata.json").put(
+        Body=json.dumps(data)
+    )

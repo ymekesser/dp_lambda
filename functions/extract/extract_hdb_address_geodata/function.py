@@ -1,8 +1,10 @@
 import boto3
+import os
+from pathlib import Path
 
 def lambda_handler(event, context):
-    src_file = 'source_data/address_geolocations.csv'
-    dst_file = 'dp-lambda/staging/address_geolocations.csv'
+    src_file = os.environ["SOURCE_HDB_ADDRESS_GEODATA"]
+    dst_file = os.environ["LOCATION_STAGING"] + "/" + Path(src_file).name
 
     bucket_name = 'mas-thesis-datapipeline-platform'
 

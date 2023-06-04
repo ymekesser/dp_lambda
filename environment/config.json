@@ -1,0 +1,37 @@
+{
+    "pipeline": {
+        "extractEnabled": true,
+        "loadEnabled": true,
+        "transformAnalyticsEnabled": true,
+        "analyticsEnabled": true
+    },
+    "logging": {
+        "enabled": true,
+        "level": "Info"
+    },
+    "fileAccess": {
+        "mode": "S3",
+        "s3Bucket": "mas-thesis-datapipeline-platform"
+    },
+    "locations": {
+        "staging": "dp-lambda/staging",
+        "storage": "dp-lambda/storage",
+        "transformedAnalytics": "dp-lambda/transformed_analytics",
+        "analytics": "dp-lambda/analytics"
+    },
+    "sourceFilePaths": {
+        "resaleFlatPrices": "source_data/resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv",
+        "mrtStations": "source_data/mrt_stations.xlsx",
+        "hdbAddressGeodata": "source_data/address_geolocations.csv"
+    },
+    "apiEndpoints": {
+        "overpass": "https://overpass-api.de/api/interpreter"
+    },
+    "storageFilenames": {
+        "resaleFlatPrices": "resale_flat_prices.csv",
+        "mrtStations": "mrt_stations.csv",
+        "mrtGeodata": "mrt_geodata.csv",
+        "mallGeodata": "mall_geodata.csv",
+        "hdbAddressGeodata": "address_geodata.csv"
+    }
+}
