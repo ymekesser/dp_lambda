@@ -1,7 +1,7 @@
 import requests
 import os
 
-from s3_io import write_json
+from s3_io import write_json, join_path
 
 query = """
 [out:json];
@@ -17,6 +17,9 @@ out center;
 
 def lambda_handler(event, context):
     endpoint = os.environ["API_OVERPASS"]
+    dst_file = join_path(
+        os.environ["LOCATION_STAGING"], os.environ["STORAGE_FILE_MALL_GEODATA"]
+    )
 
     print(f"Querying overpass ({endpoint}). Query: {query}")
 
@@ -32,7 +35,4 @@ def lambda_handler(event, context):
 
     data = response.json()
 
-    write_json(
-        data,
-        os.environ["LOCATION_STAGING"] + "/" + os.environ["STORAGE_FILE_MALL_GEODATA"],
-    )
+    write_json(data, dst_file)

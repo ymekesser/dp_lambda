@@ -1,6 +1,13 @@
 import boto3
 import os
 import json
+import pandas as pd
+import io
+import posixpath
+
+
+def join_path(*paths):
+    return posixpath.join(paths)
 
 
 def write_json(data, dst_path):
@@ -8,6 +15,35 @@ def write_json(data, dst_path):
 
     s3 = boto3.resource("s3")
     s3.Object(os.environ["S3_BUCKET"], dst_path).put(Body=json.dumps(data))
+
+
+def read_json(src_path):
+    print(f"Read JSON data from {src_path}")
+
+    s3 = boto3.resource("s3")
+    obj = s3.Object(os.environ["S3_BUCKET"], s3)
+    data = obj.get()["Body"].read().decode("utf-8")
+    return json.loads(data)
+
+
+def write_dataframe(df, dst_path):
+    print(f"Write dataframe to {dst_path}")
+
+    csv_buffer = io.StringIO()
+    df.to_csv(csv_buffer, index=False)
+
+    s3 = boto3.resource("s3")
+    s3.Object(os.environ["S3_BUCKET"], dst_path).put(Body=csv_buffer.getvalue())
+
+
+def read_dataframe(src_path):
+    print(f"Read dataframe from {src_path}")
+
+    s3 = boto3.resource("s3")
+    obj = s3.Object(os.environ["S3_BUCKET"], src_path)
+    df = pd.read_csv(io.BytesIO(obj.get()["Body"].read()))
+
+    return df
 
 
 def copy_file(src_path, dst_path):
