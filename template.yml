@@ -5,6 +5,7 @@ Globals:
     Runtime: python3.10
     Architectures:
     - x86_64
+    MemorySize: 512
     Handler: function.lambda_handler
     Timeout: 5
     Environment:
