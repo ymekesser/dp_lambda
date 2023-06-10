@@ -63,7 +63,7 @@ def read_excel(src_path: str, sheet: str) -> pd.DataFrame:
 def write_pickle(obj: any, dst_path: str) -> None:
     print(f"Writing pickled object to {dst_path}")
 
-    bytes = pickle.dumps(obj).encode("utf-8")
+    bytes = pickle.dumps(obj)
 
     s3 = boto3.resource("s3")
     s3.Object(os.environ["S3_BUCKET"], dst_path).put(Body=bytes)
