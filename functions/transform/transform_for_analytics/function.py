@@ -18,7 +18,7 @@ def lambda_handler(event, context):
     mrt_stations = read_dataframe(
         join_path(
             os.environ["LOCATION_TRANSFORMED_ANALYTICS"],
-            os.environ["STORAGE_FILE_MRT_STATIONS"],
+            os.environ["STORAGE_FILE_MRT_GEODATA"],
         )
     )
     mall_geodata = read_dataframe(
