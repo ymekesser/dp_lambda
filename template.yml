@@ -5,11 +5,11 @@ Globals:
     Architectures:
     - x86_64
     MemorySize: 512
-    Timeout: 10
+    Timeout: 20
     Environment:
       Variables:
         S3_BUCKET: mas-thesis-datapipeline-platform
-        SOURCE_HDB_RESALE_PRICES: source_data/resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv
+        SOURCE_HDB_RESALE_PRICES: source_data/resale-flat-prices-big-set.csv
         SOURCE_MRT_STATIONS: source_data/mrt_stations.xlsx
         SOURCE_HDB_ADDRESS_GEODATA: source_data/address_geolocations.csv
         LOCATION_STAGING: dp-lambda/staging
@@ -88,7 +88,7 @@ Resources:
     Properties:
       CodeUri: functions/extract/extract_mrt_geodata/
       FunctionName: ExtractMrtGeodata
-      Timeout: 20
+      Timeout: 40
       Layers:
         - !Ref S3FileAccessLayer
       Runtime: python3.10
@@ -101,7 +101,7 @@ Resources:
     Properties:
       CodeUri: functions/extract/extract_mall_geodata/
       FunctionName: ExtractMallGeodata
-      Timeout: 20
+      Timeout: 40
       Layers:
         - !Ref S3FileAccessLayer
       Runtime: python3.10
@@ -127,7 +127,7 @@ Resources:
     Properties:
       CodeUri: functions/load/load_mrt_stations/
       FunctionName: LoadMrtStations
-      Timeout: 15
+      Timeout: 30
       Layers:
         - !Ref S3FileAccessLayer
       Runtime: python3.10
@@ -189,7 +189,7 @@ Resources:
     Properties:
       CodeUri: functions/transform/clean_hdb_resale_prices/
       FunctionName: CleanHdbResalePrices
-      Timeout: 10
+      Timeout: 100
       Layers:
         - !Ref S3FileAccessLayer
       Runtime: python3.10
@@ -226,7 +226,8 @@ Resources:
     Properties:
       PackageType: Image
       FunctionName: TransformForAnalytics
-      Timeout: 20
+      Timeout: 40
+      MemorySize: 1024
       Policies:
       - AmazonS3FullAccess
     Metadata:
@@ -239,7 +240,7 @@ Resources:
     Properties:
       PackageType: Image
       FunctionName: Analytics
-      Timeout: 600
+      Timeout: 900
       MemorySize: 3008
       Policies:
       - AmazonS3FullAccess
